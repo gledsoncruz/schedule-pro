@@ -1,0 +1,22 @@
+{
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "target": "dev"
+  },
+  "workspaceFolder": "/app",
+  "remoteUser": "root",
+  "updateRemoteUserUID": false,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Prisma.prisma",
+        "bradlc.vscode-tailwindcss",
+        "csstools.postcss",
+        "PulkitGangwar.nextjs-snippets"
+      ]
+    }
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/app,type=bind"
+  ]
+}

@@ -13,9 +13,6 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copiamos apenas os manifests primeiro para cache de dependências
-COPY package.json package-lock.json ./
-
 EXPOSE 3000
 
 
@@ -23,15 +20,11 @@ EXPOSE 3000
 # Development (DevContainer)
 # =========================
 FROM base AS dev
+
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=development
 
-# Instala dependências (inclui devDependencies)
-RUN npm install
-
-# Código fonte (usado no devcontainer com bind mount)
-COPY . .
-
+# Código e dependências são gerenciados pelo DevContainer (bind mount)
 CMD ["npm", "run", "dev"]
 
 
@@ -42,8 +35,11 @@ FROM base AS builder
 
 ENV NODE_ENV=production
 
-# Reaproveita node_modules do dev para acelerar (opcional, mas seguro)
-COPY --from=dev /app/node_modules ./node_modules
+# Copiamos apenas os manifests para cache
+COPY package.json package-lock.json ./
+
+# Instala apenas deps de produção para o build
+RUN npm ci
 
 # Copia o código completo
 COPY . .

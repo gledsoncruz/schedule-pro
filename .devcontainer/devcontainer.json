@@ -6,6 +6,10 @@
   "workspaceFolder": "/app",
   "remoteUser": "root",
   "updateRemoteUserUID": false,
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/app,type=bind"
+  ],
+  "postCreateCommand": "npm install && npx prisma generate",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -15,8 +19,5 @@
         "PulkitGangwar.nextjs-snippets"
       ]
     }
-  },
-  "mounts": [
-    "source=${localWorkspaceFolder},target=/app,type=bind"
-  ]
+  }
 }

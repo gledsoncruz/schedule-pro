@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Perfeito 👌
+Vou te entregar **uma seção de README pronta pra copiar/colar**, pensada exatamente para **novos devs**, usando **DevContainer + Next.js + Prisma**, e já reforçando o `.env`.
 
-## Getting Started
+Depois deixo **2 sugestões profissionais** pra melhorar ainda mais esse passo.
 
-First, run the development server:
+---
+
+## 📦 Setup do Projeto (Novos Desenvolvedores)
+
+Esta aplicação utiliza **DevContainer** para padronizar o ambiente de desenvolvimento.
+Com isso, **não é necessário instalar Node.js, npm ou dependências localmente** — apenas Docker e VS Code.
+
+---
+
+### ✅ Pré-requisitos
+
+Antes de começar, certifique-se de ter instalado:
+
+* Docker Desktop (com suporte a WSL)
+* WSL 2 (Ubuntu recomendado)
+* Visual Studio Code
+* Extensão **Dev Containers** no VS Code
+
+---
+
+### 🚀 Passo a passo para subir o projeto
+
+#### 1️⃣ Clonar o repositório
+
+No terminal do WSL:
+
+```bash
+git clone https://github.com/gledsoncruz/schedule-pro.git
+cd schedule-pro
+```
+
+---
+
+#### 2️⃣ Configurar variáveis de ambiente
+
+Este projeto **não versiona o arquivo `.env`** por segurança.
+
+👉 Existe um arquivo de exemplo chamado `.env.example` com **todas as chaves necessárias**.
+
+Crie o arquivo `.env` a partir dele:
+
+```bash
+cp .env.example .env
+```
+
+Agora **edite o `.env`** e preencha os valores corretos (ex: banco de dados, URLs, segredos, etc.).
+
+> ⚠️ **Importante:**
+> O projeto **não sobe corretamente sem o `.env` configurado**.
+
+---
+
+#### 3️⃣ Abrir o projeto no VS Code (do jeito correto)
+
+Ainda no terminal do WSL, execute:
+
+```bash
+code .
+```
+
+> ⚠️ **Não abra o VS Code pelo ícone do Windows**.
+> Abrir pelo terminal garante que o ambiente WSL seja usado corretamente.
+
+---
+
+#### 4️⃣ Subir o DevContainer
+
+No VS Code:
+
+```
+Ctrl + Shift + P
+→ Dev Containers: Reopen in Container
+```
+
+Na primeira vez, o VS Code irá:
+
+* Construir a imagem Docker
+* Subir o container de desenvolvimento
+* Instalar as dependências (`npm install`)
+* Gerar o Prisma Client (`npx prisma generate`)
+
+⏳ Isso pode levar alguns minutos apenas na primeira execução.
+
+---
+
+#### 5️⃣ Rodar o projeto
+
+Dentro do DevContainer, no terminal integrado:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A aplicação ficará disponível em:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔄 Rebuild do ambiente (se algo der errado)
 
-To learn more about Next.js, take a look at the following resources:
+Se ocorrer qualquer problema com dependências ou build:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+Ctrl + Shift + P
+→ Dev Containers: Rebuild Without Cache
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Isso recria o ambiente do zero.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧠 Observações importantes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* ❌ **Nunca versionar o arquivo `.env`**
+* ✅ Sempre manter o `.env.example` atualizado
+* ✅ Qualquer nova variável de ambiente deve ser adicionada ao `.env.example`
+* ❌ Não rodar `npm install` fora do DevContainer
+
+---

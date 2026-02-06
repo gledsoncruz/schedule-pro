@@ -1,10 +1,3 @@
-Perfeito 👌
-Vou te entregar **uma seção de README pronta pra copiar/colar**, pensada exatamente para **novos devs**, usando **DevContainer + Next.js + Prisma**, e já reforçando o `.env`.
-
-Depois deixo **2 sugestões profissionais** pra melhorar ainda mais esse passo.
-
----
-
 ## 📦 Setup do Projeto (Novos Desenvolvedores)
 
 Esta aplicação utiliza **DevContainer** para padronizar o ambiente de desenvolvimento.
@@ -16,7 +9,7 @@ Com isso, **não é necessário instalar Node.js, npm ou dependências localment
 
 Antes de começar, certifique-se de ter instalado:
 
-* Docker Desktop (com suporte a WSL)
+* Docker Desktop (com suporte a WSL) ou instalado direto no WSL (recomendado)
 * WSL 2 (Ubuntu recomendado)
 * Visual Studio Code
 * Extensão **Dev Containers** no VS Code

@@ -60,9 +60,9 @@ export function ServiceList({ services }: ServicesListProps) {
                   <div className='flex items-center space-x-2'>
                     <span className='font-medium'>{service.name}</span>
 
-                    <span className='text-gray-500'>-</span>
+                    <span className='text-muted-foreground'>-</span>
 
-                    <span className='text-gray-500'>
+                    <span className='text-muted-foreground'>
                       {formatCurrency((service.price / 100))}
                     </span>
                   </div>

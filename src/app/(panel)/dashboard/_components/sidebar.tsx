@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Banknote, CalendarCheck, ChevronLeft, ChevronRight, Folder, List, Settings } from "lucide-react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function SidebarDashboard({ children }: { children: React.ReactNode }) {
 
@@ -34,15 +35,15 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
         "hidden md:flex md:fixed": true
       })}>
         <div className="mb-6 mt-4">
-          <Link href="/" className="text-2xl font-bold text-zinc-900">
+          <Link href="/" className="text-2xl font-bold text-foreground">
             {!isCollapsed && (
               <>Schedule</>
             )}
-            <span className="text-sky-800">PRO</span>
+            <span className="text-primary">PRO</span>
           </Link>
         </div>
         <Button
-          className="bg-gray-100 hover:bg-gray-50 text-zinc-900 self-end mb-2"
+          className="bg-secondary hover:bg-secondary/80 text-secondary-foreground self-end mb-2"
           onClick={() => setIsCollapsed(!isCollapsed)}>
           {isCollapsed ? <ChevronRight className="w-12 h-12" /> : <ChevronLeft className="w-12 h-12" />}
         </Button>
@@ -85,7 +86,7 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
         <Collapsible open={!isCollapsed}>
           <CollapsibleContent>
             <nav className="flex flex-col gap-1 overflow-hidden">
-              <span className="text-sm text-gray-400 font-medium mt-1 uppercase">
+              <span className="text-sm text-muted-foreground font-medium mt-1 uppercase">
                 Painel
               </span>
               <SidebarLink
@@ -104,7 +105,7 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
                 icon={<Folder className="w-6 h-6" />}
               />
 
-              <span className="text-sm text-gray-400 font-medium mt-1 uppercase">
+              <span className="text-sm text-muted-foreground font-medium mt-1 uppercase">
                 Minha conta
               </span>
 
@@ -128,6 +129,8 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
           </CollapsibleContent>
         </Collapsible>
 
+        <ThemeToggle className={clsx("mt-auto", isCollapsed && "w-10 p-0 overflow-hidden")} />
+
       </aside>
 
       <div className={clsx("flex flex-1 flex-col transition-all duration-300", {
@@ -135,7 +138,7 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
         "md:ml-64": !isCollapsed
       })}>
 
-        <header className="md:hidden flex items-center justify-between border-b px-2 md:px-6 h-14 z-10 sticky top-0 bg-white">
+        <header className="md:hidden flex items-center justify-between border-b border-border/60 px-2 md:px-6 h-14 z-10 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
           <Sheet>
             <div className="flex items-center gap-4">
               <SheetTrigger asChild>
@@ -145,7 +148,7 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
               </SheetTrigger>
               <h1 className="text-base md:text-lg font-semibold">Menu</h1>
             </div>
-            <SheetContent side="right" className="sm:max-w-xs text-black">
+            <SheetContent side="right" className="sm:max-w-xs">
               <SheetHeader>
                 <SheetTitle>
                   SchedulePRO
@@ -196,6 +199,8 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
             </SheetContent>
           </Sheet>
 
+          <ThemeToggle className="scale-90 origin-right" />
+
         </header>
 
         <main className="flex-1 py-4 px-2 md:p-6">
@@ -219,8 +224,8 @@ function SidebarLink({ href, icon, label, pathname, isCollapsed }: SidebarLinkPr
   return (
     <Link href={href}>
       <div className={clsx("flex items-center gap-2 px-3 py-2 rounded-md transition-colors", {
-        "text-white bg-blue-500": pathname === href,
-        "text-gray hover:bg-gray-100": pathname !== href,
+        "bg-primary text-primary-foreground": pathname === href,
+        "text-muted-foreground hover:bg-accent hover:text-accent-foreground": pathname !== href,
       })}>
         <span className="w-6 h-6">{icon}</span>
         {!isCollapsed && <span>{label}</span>}

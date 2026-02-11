@@ -34,6 +34,8 @@ import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Prisma } from "@/generated/prisma/client"
 import { updateProfile } from "../_actions/update-profile"
+import { toast } from "sonner"
+import { formatPhone } from "@/utils/masks"
 
 type UserWithSubscription = Prisma.UserGetPayload<{
   include: {
@@ -119,7 +121,14 @@ export function ProfileContent({ user }: ProfileContentProps) {
       times: selectedHours || []
     })
 
-    console.log("resposta", response)
+    if (response.error) {
+      //exibir um alerta
+      toast.error(response.error, { closeButton: true })
+      console.log("resposta", response)
+      return;
+    }
+
+    toast.success(response.data)
 
   }
 
@@ -180,7 +189,11 @@ export function ProfileContent({ user }: ProfileContentProps) {
                     <FormItem>
                       <FormLabel>Celular</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Digite seu Celular" />
+                        <Input {...field} placeholder="Digite seu Celular"
+                          onChange={(e) => {
+                            const formattedValue = formatPhone(e.target.value)
+                            field.onChange(formattedValue)
+                          }} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

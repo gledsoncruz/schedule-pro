@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth"
 import prisma from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 import z from "zod"
 
 
@@ -49,6 +50,9 @@ export async function updateProfile(formData: FormSchema) {
       }
     })
 
+    revalidatePath("/dashboard/profile")
+
+
     return {
       data: "Usuario atualizado"
     }
@@ -59,7 +63,5 @@ export async function updateProfile(formData: FormSchema) {
       error: "Falha ao atualizar usuário"
     }
   }
-
-  console.log("PASSOU ", formData)
 
 }

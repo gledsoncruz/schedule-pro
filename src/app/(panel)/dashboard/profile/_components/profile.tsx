@@ -9,7 +9,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,7 +29,7 @@ import imgTest from "../../../../../../public/barbearia.png"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Prisma } from "@/generated/prisma/client"
 import { updateProfile } from "../_actions/update-profile"
@@ -47,6 +46,34 @@ interface ProfileContentProps {
   user: UserWithSubscription
 }
 
+
+function generateTimeSlot(): string[] {
+  const hours: string[] = []
+  for (let i = 8; i <= 24; i++) {
+    for (let m = 0; m < 2; m++) {
+      const hour = i.toString().padStart(2, "0")
+      const minute = (m * 30).toString().padStart(2, "0")
+
+      hours.push(`${hour}:${minute}`)
+    }
+  }
+
+  return hours
+}
+
+function getTimeZones() {
+  return Intl.supportedValuesOf("timeZone").filter((zone) =>
+    zone.startsWith("America/Sao_Paulo") ||
+    zone.startsWith("America/Cuiaba") ||
+    zone.startsWith("America/Fortaleza") ||
+    zone.startsWith("America/Recife") ||
+    zone.startsWith("America/Bahia") ||
+    zone.startsWith("America/Belem") ||
+    zone.startsWith("America/Boa_Vista") ||
+    zone.startsWith("America/Manaus")
+  )
+}
+
 export function ProfileContent({ user }: ProfileContentProps) {
   const form = useProfileForm({
     name: user.name,
@@ -58,27 +85,8 @@ export function ProfileContent({ user }: ProfileContentProps) {
   const [selectedHours, setSelectedHours] = useState<string[]>(user.times ?? [])
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const [labelBtnSelectHours, setLabelBtnSelectHours] = useState<string>("Marcar Todos")
-  const [timeZones, setTimeZones] = useState<string[]>([]);
-  const [hours, setHours] = useState<string[]>([]);
-
-
-  function generateTimeSlot(): string[] {
-    const hours: string[] = []
-    for (let i = 8; i <= 24; i++) {
-      for (let m = 0; m < 2; m++) {
-        const hour = i.toString().padStart(2, "0")
-        const minute = (m * 30).toString().padStart(2, "0")
-
-        hours.push(`${hour}:${minute}`)
-      }
-    }
-
-    return hours
-  }
-
-  useEffect(() => {
-    setHours(generateTimeSlot());
-  }, []);
+  const [timeZones] = useState<string[]>(() => getTimeZones())
+  const [hours] = useState<string[]>(() => generateTimeSlot())
 
   function toggleHour(hour: string) {
     setSelectedHours((prev) => prev.includes(hour) ? prev.filter(h => h !== hour) : [...prev, hour].sort())
@@ -95,20 +103,6 @@ export function ProfileContent({ user }: ProfileContentProps) {
     }
 
   }
-
-  useEffect(() => {
-    const zones = Intl.supportedValuesOf("timeZone").filter((zone) =>
-      zone.startsWith("America/Sao_Paulo") ||
-      zone.startsWith("America/Cuiaba") ||
-      zone.startsWith("America/Fortaleza") ||
-      zone.startsWith("America/Recife") ||
-      zone.startsWith("America/Bahia") ||
-      zone.startsWith("America/Belem") ||
-      zone.startsWith("America/Boa_Vista") ||
-      zone.startsWith("America/Manaus")
-    );
-    setTimeZones(zones);
-  }, []);
 
   async function onSubmit(values: ProfileFormData) {
 

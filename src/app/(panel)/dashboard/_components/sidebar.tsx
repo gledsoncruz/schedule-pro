@@ -15,7 +15,6 @@ import {
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button";
 import { Banknote, CalendarCheck, ChevronLeft, ChevronRight, Folder, List, Settings } from "lucide-react";

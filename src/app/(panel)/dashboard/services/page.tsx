@@ -11,9 +11,13 @@ export default async function Services() {
   }
 
 
+  if (!session.user?.id) {
+    redirect("/")
+  }
+
   return (
     <div className="container">
-      <ServicesContent userId={session.user?.id!} />
+      <ServicesContent userId={session.user.id} />
     </div>
   )
 }

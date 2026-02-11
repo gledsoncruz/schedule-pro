@@ -16,7 +16,8 @@
         "Prisma.prisma",
         "bradlc.vscode-tailwindcss",
         "csstools.postcss",
-        "PulkitGangwar.nextjs-snippets"
+        "PulkitGangwar.nextjs-snippets",
+        "eamodio.gitlens"
       ]
     }
   }

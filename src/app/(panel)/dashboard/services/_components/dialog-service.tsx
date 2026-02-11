@@ -181,7 +181,7 @@ export function DialogService({ closeModal }: DialogServiceProps) {
 
           <Button
             type="submit"
-            className="w-full font-semibold text-white"
+            className="w-full font-semibold"
             disabled={loading}
           >
             {loading ? "Cadastrando..." : "Adicionar serviço"}

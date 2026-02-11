@@ -138,7 +138,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex justify-center">
-                <div className="bg-gray-200 relative h-40 w-40 rounded-full overflow-hidden">
+                <div className="bg-muted relative h-40 w-40 rounded-full overflow-hidden border border-border">
                   <Image
                     src={user.image ? user.image : imgTest}
                     alt="Foto"

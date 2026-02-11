@@ -3,17 +3,12 @@ import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -29,8 +24,6 @@ interface ServicesListProps {
 
 
 export function ServiceList({ services }: ServicesListProps) {
-
-  console.log(services)
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 

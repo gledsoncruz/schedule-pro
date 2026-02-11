@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import Link from "next/link";
 import {
   Sheet,
@@ -11,24 +11,26 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button";
-import { LogIn, Menu, Settings, Users } from "lucide-react";
+import { LogIn, Menu, Users } from "lucide-react";
 import { useSession } from "next-auth/react"
 import { handleRegister } from "@/app/(public)/_actions/login"
 
-export function Header() {
-  const { data: session, status } = useSession()
-  const [isOpen, setIsOpen] = useState(false)
+interface NavItem {
+  href: string
+  label: string
+  icon: ReactNode
+}
 
+interface NavLinksProps {
+  handleLogin: () => Promise<void>
+  navItems: NavItem[]
+  session: ReturnType<typeof useSession>["data"]
+  setIsOpen: (value: boolean) => void
+  status: ReturnType<typeof useSession>["status"]
+}
 
-  const navItems = [
-    { href: "#profissionais", label: "Profissionais", icon: <Users /> }
-  ]
-
-  async function handleLogin() {
-    await handleRegister("github")
-  }
-
-  const NavLinks = () => (
+function NavLinks({ handleLogin, navItems, session, setIsOpen, status }: NavLinksProps) {
+  return (
     <>
       {navItems.map((item) => (
         <Button
@@ -59,7 +61,20 @@ export function Header() {
       )}
     </>
   )
+}
 
+export function Header() {
+  const { data: session, status } = useSession()
+  const [isOpen, setIsOpen] = useState(false)
+
+
+  const navItems = [
+    { href: "#profissionais", label: "Profissionais", icon: <Users /> }
+  ]
+
+  async function handleLogin() {
+    await handleRegister("github")
+  }
 
   return (
     <header className="fixed top-0 right-0 left-0 z-999 py-4 px-6 bg-white">
@@ -68,7 +83,13 @@ export function Header() {
           Schedule<span className="text-sky-800">PRO</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-4">
-          <NavLinks />
+          <NavLinks
+            handleLogin={handleLogin}
+            navItems={navItems}
+            session={session}
+            setIsOpen={setIsOpen}
+            status={status}
+          />
         </nav>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild className="md:hidden">
@@ -84,7 +105,13 @@ export function Header() {
                 Veja nossos links
               </SheetDescription>
               <nav className="flex flex-col space-y-4 mt-6 items-start">
-                <NavLinks />
+                <NavLinks
+                  handleLogin={handleLogin}
+                  navItems={navItems}
+                  session={session}
+                  setIsOpen={setIsOpen}
+                  status={status}
+                />
               </nav>
             </SheetHeader>
           </SheetContent>

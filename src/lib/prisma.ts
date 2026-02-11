@@ -11,7 +11,7 @@ const adapter = new PrismaPg({ connectionString })
 if (process.env.NODE_ENV === "production") {
   prisma = new PrismaClient({ adapter })
 } else {
-  let globalWithPrisma = global as typeof globalThis & {
+  const globalWithPrisma = global as typeof globalThis & {
     prisma: PrismaClient
   }
 

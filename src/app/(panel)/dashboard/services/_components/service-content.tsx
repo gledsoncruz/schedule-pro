@@ -1,17 +1,19 @@
-import { getAllServices } from "../_data-access/get-all-services";
-import { ServiceList } from "./service-list";
+import { auth } from "@/lib/auth"
+import { getAllServices } from "../_data-access/get-all-services"
+import { ServiceList } from "./service-list"
+import { redirect } from "next/navigation"
 
+export async function ServicesContent() {
 
-interface ServicesContentProps {
-  userId: string;
-}
+  const session = await auth()
 
+  if (!session?.accessToken) {
+    redirect("/")
+  }
 
-export async function ServicesContent({ userId }: ServicesContentProps) {
-
-  const services = await getAllServices({ userId: userId })
+  const services = await getAllServices()
 
   return (
-    <ServiceList services={services.data || []} />
+    <ServiceList services={services} />
   )
 }

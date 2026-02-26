@@ -1,28 +1,28 @@
 "use server"
 
 import { auth } from '@/lib/auth'
-import prisma from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "O nome do serviço é obrigatório" }),
-  price: z.number().min(1, { message: "O preço do serviço é obrigatório" }),
-  duration: z.number(),
+  name: z.string().min(1, { message: "O nome do serviço é obrigatório" }),
+  price: z.string().min(1, { message: "O preço do serviço é obrigatório" }),
+  duration_minutes: z.number().min(1, { message: "Duração inválida" }),
 })
 
-type FromSchema = z.infer<typeof formSchema>
+type FormSchema = z.infer<typeof formSchema>
 
-export async function createNewService(formData: FromSchema) {
-  const session = await auth();
+export async function createNewService(formData: FormSchema) {
 
-  if (!session?.user?.id) {
+  const session = await auth()
+
+  if (!session?.accessToken) {
     return {
-      error: "Falha ao cadastra serviço",
+      error: "Não autenticado",
     }
   }
 
-  const schema = formSchema.safeParse(formData);
+  const schema = formSchema.safeParse(formData)
 
   if (!schema.success) {
     return {
@@ -32,27 +32,33 @@ export async function createNewService(formData: FromSchema) {
 
   try {
 
-    const newService = await prisma.service.create({
-      data: {
+    const res = await fetch(`${process.env.API_URL}/services/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.accessToken}`
+      },
+      body: JSON.stringify({
         name: formData.name,
         price: formData.price,
-        duration: formData.duration,
-        userId: session?.user?.id
-      }
+        duration_minutes: formData.duration_minutes
+      })
     })
+
+    if (!res.ok) {
+      throw new Error("Erro ao criar serviço")
+    }
 
     revalidatePath("/dashboard/services")
 
     return {
-      data: newService
+      data: "Serviço criado com sucesso"
     }
 
   } catch (err) {
-    console.log(err);
+    console.error(err)
     return {
-      error: "Falha ao cadastra serviço",
+      error: "Falha ao cadastrar serviço",
     }
   }
-
-
 }

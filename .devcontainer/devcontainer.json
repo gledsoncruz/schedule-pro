@@ -3,6 +3,9 @@
     "dockerfile": "../Dockerfile",
     "target": "dev"
   },
+  "runArgs": [
+    "--network=appointment-network"
+  ],
   "workspaceFolder": "/app",
   "remoteUser": "root",
   "updateRemoteUserUID": false,

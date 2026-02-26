@@ -1,4 +1,5 @@
 "use client"
+
 import { useState } from 'react'
 import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { useDialogServiceForm, DialogServiceFormData } from "./dialog-service-form"
@@ -12,76 +13,84 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { convertRealToCents } from '@/utils/convertCurrency'
 import { createNewService } from '../_actions/create-service'
 import { toast } from "sonner"
 
 interface DialogServiceProps {
   closeModal: () => void;
+  serviceId?: number;
+  initialValues?: {
+    name: string
+    price: string
+    hours: string
+    minutes: string
+  }
 }
 
-export function DialogService({ closeModal }: DialogServiceProps) {
+export function DialogService({ closeModal, initialValues, serviceId }: DialogServiceProps) {
 
-  const form = useDialogServiceForm()
-  const [loading, setLoading] = useState(false);
-
+  const form = useDialogServiceForm({ initialValues })
+  const [loading, setLoading] = useState(false)
 
   async function onSubmit(values: DialogServiceFormData) {
-    setLoading(true);
-    const priceInCents = convertRealToCents(values.price)
-    const hours = parseInt(values.hours) || 0;
-    const minutes = parseInt(values.minutes) || 0;
 
-    // Converter as horas e minutos para duração total em minutos;
-    const duration = (hours * 60) + minutes;
+    setLoading(true)
+
+    const hours = parseInt(values.hours) || 0
+    const minutes = parseInt(values.minutes) || 0
+
+    const durationMinutes = (hours * 60) + minutes
+
+    // Converte "120,50" -> "120.50"
+    const normalizedPrice = values.price
+      .replace(".", "")
+      .replace(",", ".")
 
     const response = await createNewService({
       name: values.name,
-      price: priceInCents,
-      duration: duration
+      price: normalizedPrice,
+      duration_minutes: durationMinutes
     })
 
-    setLoading(false);
-
+    setLoading(false)
 
     if (response.error) {
       toast.error(response.error)
-      return;
+      return
     }
 
     toast.success("Serviço cadastrado com sucesso")
-    handleCloseModal();
-
+    handleCloseModal()
   }
-
 
   function handleCloseModal() {
-    form.reset();
-    closeModal();
+    form.reset()
+    closeModal()
   }
 
-
   function changeCurrency(event: React.ChangeEvent<HTMLInputElement>) {
-    let { value } = event.target;
-    value = value.replace(/\D/g, '');
+
+    let { value } = event.target
+    value = value.replace(/\D/g, '')
 
     if (value) {
-      value = (parseInt(value, 10) / 100).toFixed(2);
-      value = value.replace('.', ',');
+      value = (parseInt(value, 10) / 100).toFixed(2)
+      value = value.replace('.', ',')
       value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     }
 
-    event.target.value = value;
+    event.target.value = value
     form.setValue("price", value)
-
   }
 
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Novo Serviço</DialogTitle>
+        <DialogTitle>
+          {serviceId ? "Editar Serviço" : "Novo Serviço"}
+        </DialogTitle>
         <DialogDescription>
-          Adicione um novo serviço
+          {serviceId ? "Atualize os dados do serviço" : "Adicione um novo serviço"}
         </DialogDescription>
       </DialogHeader>
 
@@ -111,7 +120,6 @@ export function DialogService({ closeModal }: DialogServiceProps) {
               )}
             />
 
-
             <FormField
               control={form.control}
               name="price"
@@ -133,8 +141,8 @@ export function DialogService({ closeModal }: DialogServiceProps) {
             />
           </div>
 
-
           <p className="font-semibold">Tempo de duração do serviço:</p>
+
           <div className="grid grid-cols-2 gap-3">
             <FormField
               control={form.control}
@@ -184,7 +192,10 @@ export function DialogService({ closeModal }: DialogServiceProps) {
             className="w-full font-semibold text-white"
             disabled={loading}
           >
-            {loading ? "Cadastrando..." : "Adicionar serviço"}
+            {loading
+              ? (serviceId ? "Atualizando..." : "Cadastrando...")
+              : (serviceId ? "Atualizar" : "Cadastrar")
+            }
           </Button>
 
         </form>

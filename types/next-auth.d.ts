@@ -1,22 +1,35 @@
-import { DefaultSession } from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth"
 
 declare module "next-auth" {
+
   interface Session {
-    user: User & DefaultSession["user"]
+    accessToken: string
+    companyId: number
+    user: {
+      id: string
+      email: string
+      name: string
+      role: string
+    } & DefaultSession["user"]
+  }
+
+  interface User {
+    id: string
+    email: string
+    name: string
+    role: string
+    companyId: number
+    accessToken: string
   }
 }
 
-interface User {
-  id: string
-  name: string
-  email: string
-  emailVerified?: null | string | boolean
-  image?: string
-  stripe_customer_id?: string
-  times: string[]
-  address?: string
-  phone?: string
-  status: boolean
-  createdAt: string
-  updatedAt: string
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string
+    email: string
+    name: string
+    role: string
+    companyId: number
+    accessToken: string
+  }
 }
